@@ -9,6 +9,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <include
+                layout="@layout/info_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@id/share_icon"
+                android:id="@+id/info_header"
+                />
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -35,14 +45,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/title_text"
-                android:layout_below="@id/share_icon"
+                android:layout_below="@id/info_header"
+                android:layout_marginTop="15dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:textSize="20sp"
                 android:textColor="@color/title_text_color"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:layout_toLeftOf="@id/favourite_icon"
                 android:layout_toStartOf="@+id/favourite_icon"/>
             <TextView
@@ -52,6 +63,10 @@
                 android:layout_below="@id/title_text"
                 android:textSize="15sp"
                 android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:maxLines="8"
+                android:ellipsize="end"
                 android:layout_alignLeft="@id/title_text"
                 android:layout_alignStart="@+id/title_text"
                 android:layout_marginBottom="15dp"
@@ -59,12 +74,13 @@
                 android:layout_toStartOf="@id/thumb_nail"
             />
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
                 android:layout_alignTop="@id/subject_text"
                 android:id="@+id/thumb_nail"
                 android:layout_alignRight="@+id/share_icon"

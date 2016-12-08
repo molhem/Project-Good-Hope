@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import com.goodhopes.poovam.projectgoodhopes.common.ListItemSpacingDecoration;
 import com.goodhopes.poovam.projectgoodhopes.common.ListViewAdapter;
 import com.goodhopes.poovam.projectgoodhopes.R;
+import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by poovam on 3/12/16.
@@ -27,6 +29,10 @@ import butterknife.ButterKnife;
 
 public class FavouritesFragment extends Fragment {
     @BindView(R.id.list) RecyclerView recyclerView;
+    @OnClick(R.id.fab)
+    public void onClick(){
+        recyclerView.smoothScrollToPosition(0);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,8 +66,8 @@ public class FavouritesFragment extends Fragment {
 
         recyclerView.addItemDecoration(new ListItemSpacingDecoration(10, true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.Adapter mAdapter = new ListViewAdapter(a);
-        recyclerView.setAdapter(mAdapter);
+//        RecyclerView.Adapter mAdapter = new ListViewAdapter(a,a);
+//        recyclerView.setAdapter(mAdapter);
 
         return root;
     }

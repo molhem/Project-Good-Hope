@@ -5,4 +5,5 @@ package com.goodhopes.poovam.projectgoodhopes.interfaces;
  */
 
 public interface ResponseHandler {
+    void parse(String response);
 }

@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -26,16 +27,16 @@ import javax.xml.parsers.ParserConfigurationException;
 public class XMLParser {
 
     public Document getDomElement(String xml){
-        Document doc = null;
+        Document doc ;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setCoalescing(true);
+
         try {
 
             DocumentBuilder db = dbf.newDocumentBuilder();
 
-            InputSource is = new InputSource();
-            is.setCharacterStream(new StringReader(xml));
-            doc = db.parse(is);
+//            InputSource is = new InputSource();
+//            is.setCharacterStream(new StringReader(xml));
+            doc = db.parse(new ByteArrayInputStream(xml.getBytes()));
 
         } catch (ParserConfigurationException e) {
             Log.e("Error: ", e.getMessage());

@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/card_view_icon"
+        android:enabled="true"
+        android:icon="@drawable/ic_view_carousel_white_24dp"
+        android:title="Card View"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/list_view_icon"
+        android:enabled="true"
+        android:icon="@drawable/ic_list_white_24dp"
+        android:title="List View"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/favourite_icon"
+        android:enabled="true"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        android:title="Favourites"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/settings_icon"
+        android:enabled="true"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="Settings"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/about_us_icon"
+        android:enabled="true"
+        android:icon="@drawable/ic_info_white_24dp"
+        android:title="About Us"
+        app:showAsAction="ifRoom" />
 
 </menu>

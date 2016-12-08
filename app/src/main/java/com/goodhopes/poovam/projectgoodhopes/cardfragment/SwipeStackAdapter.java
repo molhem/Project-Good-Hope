@@ -1,13 +1,19 @@
 package com.goodhopes.poovam.projectgoodhopes.cardfragment;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.goodhopes.poovam.projectgoodhopes.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 /**
@@ -16,11 +22,13 @@ import java.util.List;
  */
 public class SwipeStackAdapter extends BaseAdapter {
     private List<String> mData;
+    private List<String> m1Data;
 
-
-    SwipeStackAdapter(List<String> data) {
+    SwipeStackAdapter(List<String> data,List<String> data1) {
         this.mData = data;
+        this.m1Data = data1;
     }
+
 
     @Override
     public int getCount() {
@@ -43,8 +51,13 @@ public class SwipeStackAdapter extends BaseAdapter {
         convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
         TextView titleText = (TextView) convertView.findViewById(R.id.title_text);
         TextView subjectText = (TextView) convertView.findViewById(R.id.subject_text);
+        ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumb_nail);
         titleText.setText(mData.get(position));
-        subjectText.setText(mData.get(position));
+        subjectText.setText(m1Data.get(position));
+        Picasso.with(parent.getContext())
+                .load(m1Data.get(position))
+                .resize(60, 60)
+                .into(thumbNail);
 
         return convertView;
     }

@@ -10,11 +10,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <include
+                layout="@layout/info_header"
+                android:id="@+id/info_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                />
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/info_header"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:id="@+id/thumb_nail"
                 android:background="@drawable/image_shape"/>
             <TextView
@@ -27,7 +35,7 @@
                 android:layout_marginTop="15dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:maxLines="3"
+                android:maxLines="5"
                 android:ellipsize="end"/>
             <TextView
                 android:layout_width="match_parent"
@@ -40,17 +48,21 @@
                 android:layout_alignStart="@+id/title_text"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
+                android:paddingBottom="15dp"
+                android:layout_above="@+id/icon_container"
+                android:ellipsize="end"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:id="@+id/icon_container"
                 android:layout_marginBottom="10dp">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:id="@id/favourite_icon"
+                    android:id="@+id/favourite_icon"
                     android:src="@drawable/ic_favorite_border_black_24dp"/>
                 <ImageView
                     android:layout_width="20dp"

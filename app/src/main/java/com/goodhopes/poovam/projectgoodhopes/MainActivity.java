@@ -1,16 +1,28 @@
 package com.goodhopes.poovam.projectgoodhopes;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.content.res.Configuration;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.aboutus.AboutUsFragment;
 import com.goodhopes.poovam.projectgoodhopes.cardfragment.CardViewFragment;
@@ -18,22 +30,18 @@ import com.goodhopes.poovam.projectgoodhopes.favouritesfragment.FavouritesFragme
 import com.goodhopes.poovam.projectgoodhopes.listfragment.ListViewFragment;
 import com.goodhopes.poovam.projectgoodhopes.uploadfragment.UploadFragment;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import link.fls.swipestack.SwipeStack;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    @BindView(R.id.frame_container) FrameLayout frameLayout;
-    @BindView(R.id.card_view_icon) ImageView cardViewIcon;
-    @BindView(R.id.list_view_icon) ImageView listViewIcon;
-    @BindView(R.id.favourite_icon) ImageView favouriteIcon;
-    @BindView(R.id.upload_icon) ImageView uploadIcon;
-    @BindView(R.id.settings_icon) ImageView settingsIcon;
-    @BindView(R.id.about_us_icon) ImageView aboutUsIcon;
+    @BindView(R.id.frame_container)
+    FrameLayout frameLayout;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigationView;
     Fragment cardViewFragment;
     Fragment listViewFragment;
     Fragment favouritesFragment;
@@ -45,73 +53,62 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        return onMenuIconClicked(item);
+                    }
+                });
         cardViewFragment = new CardViewFragment();
         listViewFragment = new ListViewFragment();
         favouritesFragment = new FavouritesFragment();
         uploadFragment = new UploadFragment();
         aboutUsFragment = new AboutUsFragment();
         settingsDialog = createDialog();
-        ButterKnife.bind(this);
-        setIconSize();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
                 cardViewFragment).commit();
-        cardViewIcon.setColorFilter(ContextCompat.getColor(this,R.color.theme_pink));
     }
 
-    private void setIconSize()
-    {
-        Configuration configuration = getResources().getConfiguration();
-        int screenWidthDp = configuration.screenWidthDp/2;
-        cardViewIcon.getLayoutParams().width = screenWidthDp;
-        listViewIcon.getLayoutParams().width = screenWidthDp;
-        favouriteIcon.getLayoutParams().width = screenWidthDp;
-        uploadIcon.getLayoutParams().width = screenWidthDp;
-        settingsIcon.getLayoutParams().width = screenWidthDp;
-        aboutUsIcon.getLayoutParams().width = screenWidthDp;
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
-    public void onMenuIconClicked(View view) {
-        ImageView icon = (ImageView) view;
-        switch (icon.getId()){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_menu, menu);
+        return true;
+    }
+
+    public boolean onMenuIconClicked(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.card_view_icon:
-                setColorForIcon(icon);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
                         cardViewFragment).commit();
-                break;
+                return true;
             case R.id.list_view_icon:
-                setColorForIcon(icon);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
                         listViewFragment).commit();
-                break;
+                return true;
             case R.id.favourite_icon:
-                setColorForIcon(icon);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
                         favouritesFragment).commit();
-                break;
-            case R.id.upload_icon:
-                setColorForIcon(icon);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                        uploadFragment).commit();
-                break;
+                return true;
             case R.id.settings_icon:
                 settingsDialog.show();
-                break;
+                return false;
             case R.id.about_us_icon:
-                setColorForIcon(icon);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
                         aboutUsFragment).commit();
-                break;
+                return true;
+            default:
+                return false;
         }
     }
-    private void setColorForIcon(ImageView selectedIcon)
-    {
-        cardViewIcon.setColorFilter(ContextCompat.getColor(this,R.color.colorPrimary));
-        listViewIcon.setColorFilter(ContextCompat.getColor(this,R.color.colorPrimary));
-        favouriteIcon.setColorFilter(ContextCompat.getColor(this,R.color.colorPrimary));
-        uploadIcon.setColorFilter(ContextCompat.getColor(this,R.color.colorPrimary));
-        aboutUsIcon.setColorFilter(ContextCompat.getColor(this,R.color.colorPrimary));
-        selectedIcon.setColorFilter(ContextCompat.getColor(this,R.color.theme_pink));
-    }
+
     public Dialog createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Settings");
@@ -124,4 +121,5 @@ public class MainActivity extends AppCompatActivity {
                 });
         return builder.create();
     }
+
 }
