@@ -26,10 +26,10 @@ public class WebBrowserView extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         webview.setWebViewClient(new WebViewClient());
-       // String URL = getIntent().getStringExtra("URL");
-       // String title = getIntent().getStringExtra("title");
-        getSupportActionBar().setTitle("Insert Title Here");
-        String URL = "http://www.facebook.com";
+        String URL = getIntent().getStringExtra("contentURL");
+        String title = getIntent().getStringExtra("title");
+        getSupportActionBar().setTitle(title);
+
         webview.loadUrl(URL);
     }
 

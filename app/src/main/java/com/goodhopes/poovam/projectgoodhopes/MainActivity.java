@@ -1,36 +1,24 @@
 package com.goodhopes.poovam.projectgoodhopes;
 
-import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.aboutus.AboutUsFragment;
 import com.goodhopes.poovam.projectgoodhopes.cardfragment.CardViewFragment;
+import com.goodhopes.poovam.projectgoodhopes.common.CurrentView;
 import com.goodhopes.poovam.projectgoodhopes.favouritesfragment.FavouritesFragment;
 import com.goodhopes.poovam.projectgoodhopes.listfragment.ListViewFragment;
-import com.goodhopes.poovam.projectgoodhopes.uploadfragment.UploadFragment;
-
-import java.util.Calendar;
+import com.goodhopes.poovam.projectgoodhopes.shelffragment.ShelfFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,9 +33,10 @@ public class MainActivity extends AppCompatActivity {
     Fragment cardViewFragment;
     Fragment listViewFragment;
     Fragment favouritesFragment;
-    Fragment uploadFragment;
+    Fragment shelfFragment;
     Fragment aboutUsFragment;
     Dialog settingsDialog;
+    CurrentView currentView = CurrentView.LISTVIEW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         cardViewFragment = new CardViewFragment();
         listViewFragment = new ListViewFragment();
         favouritesFragment = new FavouritesFragment();
-        uploadFragment = new UploadFragment();
+        shelfFragment = new ShelfFragment();
         aboutUsFragment = new AboutUsFragment();
         settingsDialog = createDialog();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
@@ -85,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onMenuIconClicked(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.card_view_icon:
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                        cardViewFragment).commit();
-                return true;
+
             case R.id.list_view_icon:
+                switchViews(item);
+                return true;
+            case R.id.shelf_icon:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                        listViewFragment).commit();
+                        shelfFragment).commit();
                 return true;
             case R.id.favourite_icon:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
@@ -106,6 +95,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return false;
+        }
+    }
+
+    public void switchViews(MenuItem item){
+        if(currentView == CurrentView.LISTVIEW){
+            currentView = CurrentView.CARDVIEW;
+            item.setIcon(R.drawable.ic_list_white_24dp);
+            item.setTitle("List View");
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
+                    cardViewFragment).commit();
+        }else {
+            currentView = CurrentView.LISTVIEW;
+            item.setIcon(R.drawable.ic_view_carousel_white_24dp);
+            item.setTitle("Card View");
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
+                    listViewFragment).commit();
         }
     }
 

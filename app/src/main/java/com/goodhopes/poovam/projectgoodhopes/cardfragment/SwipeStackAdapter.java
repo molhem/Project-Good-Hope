@@ -2,6 +2,7 @@ package com.goodhopes.poovam.projectgoodhopes.cardfragment;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,32 +14,34 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.goodhopes.poovam.projectgoodhopes.R;
+import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Created by poovam on 2/12/16.
  * adapter to maintain the stream for card views
  */
 public class SwipeStackAdapter extends BaseAdapter {
-    private List<String> mData;
-    private List<String> m1Data;
+    private ArrayList<Entry> entries;
 
-    SwipeStackAdapter(List<String> data,List<String> data1) {
-        this.mData = data;
-        this.m1Data = data1;
+
+    SwipeStackAdapter(ArrayList<Entry> entries) {
+        this.entries = entries;
     }
 
 
     @Override
     public int getCount() {
-        return mData.size();
+        return entries.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return mData.get(position);
+    public Object getItem(int i) {
+        return entries.get(i).title;
     }
+
 
     @Override
     public long getItemId(int position) {
@@ -51,13 +54,27 @@ public class SwipeStackAdapter extends BaseAdapter {
         convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.card, parent, false);
         TextView titleText = (TextView) convertView.findViewById(R.id.title_text);
         TextView subjectText = (TextView) convertView.findViewById(R.id.subject_text);
+        TextView companyName = (TextView) convertView.findViewById(R.id.company_name);
+        TextView time = (TextView) convertView.findViewById(R.id.time);
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumb_nail);
-        titleText.setText(mData.get(position));
-        subjectText.setText(m1Data.get(position));
-        Picasso.with(parent.getContext())
-                .load(m1Data.get(position))
-                .resize(60, 60)
-                .into(thumbNail);
+        ImageView logo = (ImageView) convertView.findViewById(R.id.company_logo);
+
+
+
+        titleText.setText(entries.get(position).title);
+        subjectText.setText(entries.get(position).content);
+        companyName.setText(entries.get(position).author);
+        time.setText(entries.get(position).time+"");
+        logo.setImageDrawable(ContextCompat.getDrawable(logo.getContext(),
+                entries.get(position).companyLogoId));
+
+        thumbNail.setVisibility(View.GONE);
+
+//
+//        Picasso.with(parent.getContext())
+//                .load(m1Data.get(position))
+//                .resize(60, 60)
+//                .into(thumbNail);
 
         return convertView;
     }

@@ -27,6 +27,8 @@ import org.w3c.dom.NodeList;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,15 +44,9 @@ public class ListViewFragment extends Fragment {
     @BindView(R.id.list) RecyclerView recyclerView;
     @OnClick(R.id.fab)
     public void onClick(){
-        recyclerView.smoothScrollToPosition(0);
+        recyclerView.scrollToPosition(0);
     }
     ArrayList<Entry> a = new ArrayList<>();
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Nullable
     @Override
@@ -75,18 +71,19 @@ public class ListViewFragment extends Fragment {
                         recyclerView.getAdapter().notifyItemRemoved(viewHolder.getAdapterPosition());
                     }
                 };
-//        for(final Subscription subscription: Subscription.values()){
-//
-//        }
-        NetworkConnection.getInstance(getActivity().getApplicationContext()).
-                getRSS(Subscription.DINAMALAR.URL,
-                        new ResponseHandler() {
-                            @Override
-                            public void parse(String response) {
-                                a.addAll(Subscription.DINAMALAR.getParser(response));
-                                recyclerView.getAdapter().notifyDataSetChanged();
-                            }
-                        });
+        for(final Subscription subscription: Subscription.values()){
+            NetworkConnection.getInstance(getActivity().getApplicationContext()).
+                    getRSS(subscription.URL,
+                            new ResponseHandler() {
+                                @Override
+                                public void parse(String response) {
+                                    a.addAll(subscription.getParser(response));
+                                    recyclerView.getAdapter().notifyDataSetChanged();
+                                    Log.d("Enters",subscription.name);
+                                }
+                            });
+        }
+
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);

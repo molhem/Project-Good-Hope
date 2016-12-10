@@ -1,4 +1,4 @@
-package com.goodhopes.poovam.projectgoodhopes.parsers.tamil;
+package com.goodhopes.poovam.projectgoodhopes.parsers.english;
 
 import android.util.Log;
 
@@ -16,29 +16,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Locale;
 
 /**
- * Created by poovam on 7/12/16.
- * A parser that parses daily thanthi
+ * Created by poovam on 8/12/16.
+ * TOI doesnt have images
+ * GMT have to be converted to IST
  */
 
-public class DailyThanthiParser {
-
+public class TOIParser {
 
     public static ArrayList<Entry> parseResponse(String response){
-        ArrayList<Entry> dailyThanthiEntries = new ArrayList<>();
+        ArrayList<Entry> toiEntries = new ArrayList<>();
         final XMLParser parser = new XMLParser();
 
-        try {
-            response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        response = response.replace("\n","");
-        response = response.replace("\r","");
-        response = response.replace("<p>","");
         Document doc = parser.getDomElement(response);
         NodeList nl = doc.getElementsByTagName("item");
         for (int i = 0; i < nl.getLength(); i++) {
@@ -51,26 +42,18 @@ public class DailyThanthiParser {
             String time = (parser.getValue(e,"pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());
             try {
-                //Thu, 8 Dece 2016 09:30:00 GMT
-                String p = "[^.*,\\s\\d+\\s+]+[\\s+]";
-                Pattern pattern = Pattern.compile(p);
-                Matcher m = pattern.matcher(time);
-                while (m.find()) {
-                    String month = m.group().substring(0, 3);
-                    time = time.replaceFirst(p, month + " ");
-                }
-                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+                //Thu, 08 Dec 2016 18:59:54 GMT
+                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.US);
                 Date parsedDate = dateFormat.parse(time);
                 timestamp = new java.sql.Timestamp(parsedDate.getTime());
-                timestamp.setTime(timestamp.getTime() + 330*60*1000);
-                //Log.d("daily thanthi",timestamp.toString());
+                //Log.d("TOI",timestamp.toString());
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
-            dailyThanthiEntries.add(new Entry(title,Subscription.DAILYTHANTHI.name,content,thumbNailURL,timestamp,contentURL,
-                    Subscription.DAILYTHANTHI.iconID));
+            toiEntries.add(new Entry(title,Subscription.TOI.name,content,thumbNailURL,timestamp,contentURL,
+                    Subscription.TOI.iconID));
         }
 
-        return dailyThanthiEntries;
+        return toiEntries;
     }
 }

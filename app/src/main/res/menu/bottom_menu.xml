@@ -2,17 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/card_view_icon"
-        android:enabled="true"
-        android:icon="@drawable/ic_view_carousel_white_24dp"
-        android:title="Card View"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/card_view_icon"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_view_carousel_white_24dp"-->
+        <!--android:title="Card View"-->
+        <!--app:showAsAction="always" />-->
     <item
         android:id="@+id/list_view_icon"
         android:enabled="true"
         android:icon="@drawable/ic_list_white_24dp"
         android:title="List View"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/shelf_icon"
+        android:enabled="true"
+        android:icon="@drawable/ic_collections_bookmark_black_24dp"
+        android:title="Shelf"
         app:showAsAction="always" />
     <item
         android:id="@+id/favourite_icon"

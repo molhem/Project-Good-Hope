@@ -1,4 +1,4 @@
-package com.goodhopes.poovam.projectgoodhopes.parsers.tamil;
+package com.goodhopes.poovam.projectgoodhopes.parsers.english;
 
 import android.util.Log;
 
@@ -10,57 +10,45 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
- * Created by poovam on 7/12/16.
- * A parser that parses for Dinakaran
- * parsed timestamp
- * need to get the image link from CDATA
- * date needs no conversion
+ * Created by poovam on 8/12/16.
+ * No images date parsed in gmt have to be converted to ist
  */
 
-public class DinakaranParser {
-
-
+public class IndianExpressParser {
     public static ArrayList<Entry> parseResponse(String response){
         XMLParser parser = new XMLParser();
-        ArrayList<Entry> dinakaranEntries = new ArrayList<>();
-        try {
-            response = new String(response.getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        response = response.replace("<p>","");
+        ArrayList<Entry> indianExpressEntries = new ArrayList<>();
+
         Document doc = parser.getDomElement(response);
         NodeList nl = doc.getElementsByTagName("item");
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-            Element line = (Element) e.getElementsByTagName("description").item(0);
-
             String title = (parser.getValue(e, "title"));
-            String content = parser.getCharacterDataFromElement(line);
+            String content = (parser.getValue(e,"description"));
             String thumbNailURL = (parser.getValue(e, "image"));
             String contentURL = (parser.getValue(e, "link"));
             String time = (parser.getValue(e, "pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());
             try {
-                //8-12-2016 20:34
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                //Thu, 08 Dec 2016 18:59:54 GMT
+                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.US);
                 Date parsedDate = dateFormat.parse(time);
                 timestamp = new java.sql.Timestamp(parsedDate.getTime());
-                //Log.d("dinakaran",timestamp.toString());
+                //Log.d("Indian Express",timestamp.toString());
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
-            dinakaranEntries.add(new Entry(title,Subscription.DINAKARAN.name,content,thumbNailURL,
-                    timestamp,contentURL, Subscription.DINAKARAN.iconID));
+            indianExpressEntries.add(new Entry(title,Subscription.INDIAN_EXPRESS.name,content,thumbNailURL,timestamp,contentURL,
+                    Subscription.INDIAN_EXPRESS.iconID));
         }
-        return dinakaranEntries;
+        return indianExpressEntries;
     }
 }

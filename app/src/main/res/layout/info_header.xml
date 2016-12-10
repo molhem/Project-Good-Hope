@@ -5,11 +5,10 @@
     >
 
     <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
-        android:src="@drawable/dinakaran_logo"
         android:id="@+id/company_logo"
         android:background="@null"
         android:layout_centerVertical="true"
@@ -22,6 +21,9 @@
         android:layout_toRightOf="@id/company_logo"
         android:layout_toEndOf="@id/company_logo"
         android:id="@+id/company_name"
+        android:textSize="12sp"
+        android:layout_centerVertical="true"
+        android:text="Times Of India"
         />
     <ImageView
         android:layout_width="7dp"
@@ -30,8 +32,7 @@
         android:layout_marginStart="5dp"
         android:layout_toRightOf="@id/company_name"
         android:layout_toEndOf="@id/company_name"
-        android:layout_alignTop="@id/company_name"
-        android:layout_alignBottom="@id/company_name"
+        android:layout_centerVertical="true"
         android:id="@+id/divider"
         android:src="@drawable/ic_favorite_black_24dp"/>
     <TextView
@@ -43,7 +44,10 @@
         android:layout_toEndOf="@id/divider"
         android:id="@+id/time"
         android:maxLines="1"
+        android:layout_centerVertical="true"
         android:ellipsize="end"
-        android:text="Time"/>
+        android:textSize="12sp"
+        android:text="12-12-12"
+        />
 
 </RelativeLayout>

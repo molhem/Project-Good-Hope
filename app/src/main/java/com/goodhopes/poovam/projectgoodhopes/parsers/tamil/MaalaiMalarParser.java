@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,42 +20,43 @@ import java.util.Locale;
 
 /**
  * Created by poovam on 8/12/16.
- * Dinamani parser...
+ * image source present inside cdata has to be parsed
  * date has to be converted
- * no image src sent by server
  */
 
-public class DinamaniParser {
-    public static ArrayList<Entry> parseResponse(String response){
-        XMLParser parser = new XMLParser();
-        ArrayList<Entry> dinamaniEntries = new ArrayList<>();
+public class MaalaiMalarParser {
 
+    public static ArrayList<Entry> parseResponse(String response){
+        ArrayList<Entry> maalaiMalarEntries = new ArrayList<>();
+        final XMLParser parser = new XMLParser();
+
+        response = response.replace("\n","");
+        response = response.replace("\r","");
+        response = response.replace("<p>","");
         Document doc = parser.getDomElement(response);
         NodeList nl = doc.getElementsByTagName("item");
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-            Element line = (Element) e.getElementsByTagName("description").item(0);
 
-            String title = (parser.getValue(e, "title"));
-            String content = parser.getCharacterDataFromElement(line);
-            String author = (parser.getValue(e, "author"));
-            String thumbNailURL = (parser.getValue(e, "image"));
-            String contentURL = (parser.getValue(e, "link"));
-            String time = (parser.getValue(e, "pubDate"));
+            String title = (parser.getValue(e,"title"));
+            String content = (parser.getValue(e,"description"));
+            String thumbNailURL = (parser.getValue(e,"image"));
+            String contentURL = (parser.getValue(e,"link"));
+            String time = (parser.getValue(e,"pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());
             try {
-                //Monday, December 5, 2016 08:08 AM +0530
-                SimpleDateFormat dateFormat = new SimpleDateFormat("E, MMM dd, yyyy HH:mm a Z", Locale.US);
+                //Fri, 09 Dec 2016 00:44:00 +0530
+                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                 Date parsedDate = dateFormat.parse(time);
                 timestamp = new java.sql.Timestamp(parsedDate.getTime());
-                //Log.d("dinamani",timestamp.toString());
+                //Log.d("maalaimalar",timestamp.toString());
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
-
-            dinamaniEntries.add(new Entry(title,Subscription.DINAMANI.name,content,thumbNailURL,
-                    timestamp,contentURL,Subscription.DINAMANI.iconID));
+            maalaiMalarEntries.add(new Entry(title,Subscription.MAALAIMALAR.name,content,thumbNailURL,
+                    timestamp,contentURL, Subscription.MAALAIMALAR.iconID));
         }
-        return dinamaniEntries;
+
+        return maalaiMalarEntries;
     }
 }
