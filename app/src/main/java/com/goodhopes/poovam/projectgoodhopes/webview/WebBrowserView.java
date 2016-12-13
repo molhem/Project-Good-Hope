@@ -39,7 +39,6 @@ public class WebBrowserView extends AppCompatActivity{
             case android.R.id.home:
                 onBackPressed();
                 break;
-            default: onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

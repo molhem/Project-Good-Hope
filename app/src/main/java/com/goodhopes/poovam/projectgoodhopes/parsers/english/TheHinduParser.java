@@ -1,7 +1,10 @@
-package com.goodhopes.poovam.projectgoodhopes.parsers;
+package com.goodhopes.poovam.projectgoodhopes.parsers.english;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
@@ -19,14 +22,19 @@ import java.util.Date;
 /**
  * Created by poovam on 8/12/16.
  * this is the parser for both hindu and tamil hindu
- * english hindu has a different date format hasn't been parsed
+ * No image provided data is provided clean
  */
 
-public class HinduParser {
+public class TheHinduParser {
 
-    public static ArrayList<Entry> parseResponse(String response){
+    public static ArrayList<Entry> parseResponse(String response,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(Subscription.THE_HINDU.stringID), response);
+        editor.apply();
         XMLParser parser = new XMLParser();
-        ArrayList<Entry> tamilHinduEntries = new ArrayList<>();
+        ArrayList<Entry> HinduEntries = new ArrayList<>();
 
         Document doc = parser.getDomElement(response);
         NodeList nl = doc.getElementsByTagName("item");
@@ -41,7 +49,6 @@ public class HinduParser {
 
 
             String title = parser.getCharacterDataFromElement(titleElement);
-            String author = parser.getCharacterDataFromElement(authorElement);
             String thumbNailURL = parser.getCharacterDataFromElement(thumbNailURLElement);
             String content = parser.getCharacterDataFromElement(contentElement);
             String time = parser.getCharacterDataFromElement(timeElement);
@@ -56,9 +63,9 @@ public class HinduParser {
             } catch (ParseException e1) {
                 e1.printStackTrace();
             }
-            tamilHinduEntries.add(new Entry(title,Subscription.THE_HINDU.name,content,thumbNailURL,timestamp,contentURL,
+            HinduEntries.add(new Entry(title,Subscription.THE_HINDU.name,content,thumbNailURL,timestamp,contentURL,
                     Subscription.THE_HINDU.iconID));
         }
-        return tamilHinduEntries;
+        return HinduEntries;
     }
 }

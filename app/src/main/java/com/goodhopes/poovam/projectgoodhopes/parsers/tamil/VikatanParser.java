@@ -1,7 +1,10 @@
 package com.goodhopes.poovam.projectgoodhopes.parsers.tamil;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
@@ -21,12 +24,18 @@ import java.util.TimeZone;
 
 /**
  * Created by poovam on 7/12/16.
- * A parser for Dinakaran Tamil Daily RSS
+ * A parser for Vikatan Tamil Daily RSS
+ * Image parsed content cleaned
  */
 
 public class VikatanParser {
 
-    public static ArrayList<Entry> parseResponse(String response){
+    public static ArrayList<Entry> parseResponse(String response,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(Subscription.VIKATAN.stringID), response);
+        editor.apply();
         XMLParser parser = new XMLParser();
         ArrayList<Entry> vikatanEntries = new ArrayList<>();
         try {
@@ -43,7 +52,11 @@ public class VikatanParser {
 
             String title = (parser.getValue(e, "title"));
             String content = parser.getCharacterDataFromElement(line);
-            String thumbNailURL = (parser.getValue(e, "image"));
+            String thumbNailURL = content.split(".jpg")[0];
+            thumbNailURL = thumbNailURL.substring(thumbNailURL.lastIndexOf("'")+1);
+
+            content = content.substring(content.lastIndexOf(">")+1);
+
             String contentURL = (parser.getValue(e, "link"));
             String time = (parser.getValue(e, "pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());

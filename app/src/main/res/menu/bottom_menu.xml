@@ -9,10 +9,10 @@
         <!--android:title="Card View"-->
         <!--app:showAsAction="always" />-->
     <item
-        android:id="@+id/list_view_icon"
+        android:id="@+id/home_icon"
         android:enabled="true"
-        android:icon="@drawable/ic_list_white_24dp"
-        android:title="List View"
+        android:icon="@drawable/ic_home_white_24dp"
+        android:title="Home"
         app:showAsAction="always" />
     <item
         android:id="@+id/shelf_icon"

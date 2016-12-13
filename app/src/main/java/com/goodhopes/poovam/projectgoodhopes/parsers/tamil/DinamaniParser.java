@@ -1,7 +1,10 @@
 package com.goodhopes.poovam.projectgoodhopes.parsers.tamil;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
@@ -20,12 +23,17 @@ import java.util.Locale;
 /**
  * Created by poovam on 8/12/16.
  * Dinamani parser...
- * date has to be converted
+ * date cleaned
  * no image src sent by server
  */
 
 public class DinamaniParser {
-    public static ArrayList<Entry> parseResponse(String response){
+    public static ArrayList<Entry> parseResponse(String response,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(Subscription.DINAMANI.stringID), response);
+        editor.apply();
         XMLParser parser = new XMLParser();
         ArrayList<Entry> dinamaniEntries = new ArrayList<>();
 

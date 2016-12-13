@@ -3,6 +3,7 @@
     package="com.goodhopes.poovam.projectgoodhopes">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:name=".common.BaseApplicationClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".webview.WebBrowserView"/>
-
+        <activity android:name=".reader.ReaderActivity" />
     </application>
 
 </manifest>

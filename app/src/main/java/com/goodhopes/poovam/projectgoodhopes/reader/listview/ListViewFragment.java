@@ -1,52 +1,73 @@
-package com.goodhopes.poovam.projectgoodhopes.listfragment;
+package com.goodhopes.poovam.projectgoodhopes.reader.listview;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.goodhopes.poovam.projectgoodhopes.common.ListItemSpacingDecoration;
 import com.goodhopes.poovam.projectgoodhopes.common.ListViewAdapter;
-import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.NetworkConnection;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.interfaces.ResponseHandler;
-import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by poovam on 3/12/16.
- * Fragment containing the listview
- */
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class ListViewFragment extends Fragment {
 
-    @BindView(R.id.list) RecyclerView recyclerView;
+    @BindView(R.id.list) public RecyclerView recyclerView;
+    @BindView(R.id.fab) public FloatingActionButton floatingActionButton;
+
+    RecyclerView.Adapter mAdapter;
     @OnClick(R.id.fab)
     public void onClick(){
         recyclerView.scrollToPosition(0);
     }
-    ArrayList<Entry> a = new ArrayList<>();
+    public ArrayList<Entry> entries = new ArrayList<>();
+    private Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Subscription subscription =(Subscription) getArguments().getSerializable("enum");
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getActivity()
+                .getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        String result = sharedPref.getString(getString(subscription.stringID),"-");
+        if(!result.equals("-")){
+            entries = subscription.getParser(result,getContext());
+        }
+    }
 
     @Nullable
     @Override
@@ -54,7 +75,8 @@ public class ListViewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View listView = inflater.inflate(R.layout.list_view_fragment, container, false);
         ButterKnife.bind(this, listView);
-
+        //FAB sometimes appear at the top left corner
+        floatingActionButton.hide();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -71,30 +93,21 @@ public class ListViewFragment extends Fragment {
                         recyclerView.getAdapter().notifyItemRemoved(viewHolder.getAdapterPosition());
                     }
                 };
-        for(final Subscription subscription: Subscription.values()){
-            NetworkConnection.getInstance(getActivity().getApplicationContext()).
-                    getRSS(subscription.URL,
-                            new ResponseHandler() {
-                                @Override
-                                public void parse(String response) {
-                                    a.addAll(subscription.getParser(response));
-                                    recyclerView.getAdapter().notifyDataSetChanged();
-                                    Log.d("Enters",subscription.name);
-                                }
-                            });
-        }
-
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         recyclerView.addItemDecoration(new ListItemSpacingDecoration(10, true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.Adapter mAdapter = new ListViewAdapter(a);
+        mAdapter = new ListViewAdapter(entries,getActivity(),true);
         recyclerView.setAdapter(mAdapter);
 
         return listView;
     }
-
+    public void notifyDatasetChanged(){
+        mAdapter = new ListViewAdapter(entries,getActivity(),true);
+        recyclerView.setAdapter(mAdapter);
+        Toast.makeText(context,"News is updated",Toast.LENGTH_SHORT).show();
+    }
 }
 

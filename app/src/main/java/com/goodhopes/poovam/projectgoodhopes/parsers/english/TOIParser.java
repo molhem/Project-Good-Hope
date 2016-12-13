@@ -1,7 +1,10 @@
 package com.goodhopes.poovam.projectgoodhopes.parsers.english;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
@@ -26,7 +29,12 @@ import java.util.Locale;
 
 public class TOIParser {
 
-    public static ArrayList<Entry> parseResponse(String response){
+    public static ArrayList<Entry> parseResponse(String response,Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(Subscription.TOI.stringID), response);
+        editor.apply();
         ArrayList<Entry> toiEntries = new ArrayList<>();
         final XMLParser parser = new XMLParser();
 

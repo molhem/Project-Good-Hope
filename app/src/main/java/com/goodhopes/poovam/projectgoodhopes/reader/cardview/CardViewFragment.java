@@ -1,25 +1,20 @@
-package com.goodhopes.poovam.projectgoodhopes.cardfragment;
+package com.goodhopes.poovam.projectgoodhopes.reader.cardview;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
-import com.goodhopes.poovam.projectgoodhopes.common.NetworkConnection;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
-import com.goodhopes.poovam.projectgoodhopes.interfaces.ResponseHandler;
-import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
+import com.goodhopes.poovam.projectgoodhopes.common.SwipeStackAdapter;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -33,24 +28,29 @@ import link.fls.swipestack.SwipeStack;
  */
 
 public class CardViewFragment extends Fragment {
-    @BindView(R.id.swipeStack) SwipeStack swipeStack;
-    ArrayList<Entry> entries = new ArrayList<>();
-
+    @BindView(R.id.swipeStack) public SwipeStack swipeStack;
     SwipeStackAdapter adapter;
+    public ArrayList<Entry> entries = new ArrayList<>();
+    private Context context;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for(final Subscription subscription: Subscription.values()){
-            NetworkConnection.getInstance(getActivity().getApplicationContext()).getRSS(subscription.URL,
-                            new ResponseHandler() {
-                                @Override
-                                public void parse(String response) {
-                                    entries.addAll(subscription.getParser(response));
-                                    adapter.notifyDataSetChanged();
-                                    Log.d("Enters",subscription.name);
-                                }});
+        Subscription subscription =(Subscription) getArguments().getSerializable("enum");
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getActivity()
+                        .getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        String result = sharedPref.getString(getString(subscription.stringID),"-");
+        if(!result.equals("-")){
+            entries = subscription.getParser(result,getContext());
         }
-
     }
 
     @Nullable
@@ -61,5 +61,10 @@ public class CardViewFragment extends Fragment {
         adapter =  new SwipeStackAdapter(entries);
         swipeStack.setAdapter(adapter);
         return cardView;
+    }
+    public void notifyDatasetChanged(){
+        adapter = new SwipeStackAdapter(entries);
+        swipeStack.setAdapter(adapter);
+        Toast.makeText(context,"News is updated",Toast.LENGTH_SHORT).show();
     }
 }

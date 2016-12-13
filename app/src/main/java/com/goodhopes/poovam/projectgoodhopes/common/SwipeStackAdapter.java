@@ -1,4 +1,4 @@
-package com.goodhopes.poovam.projectgoodhopes.cardfragment;
+package com.goodhopes.poovam.projectgoodhopes.common;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -27,7 +27,7 @@ public class SwipeStackAdapter extends BaseAdapter {
     private ArrayList<Entry> entries;
 
 
-    SwipeStackAdapter(ArrayList<Entry> entries) {
+    public SwipeStackAdapter(ArrayList<Entry> entries) {
         this.entries = entries;
     }
 
@@ -64,7 +64,7 @@ public class SwipeStackAdapter extends BaseAdapter {
         titleText.setText(entries.get(position).title);
         subjectText.setText(entries.get(position).content);
         companyName.setText(entries.get(position).author);
-        time.setText(entries.get(position).time+"");
+        time.setText(entries.get(position).time+"   ");
         logo.setImageDrawable(ContextCompat.getDrawable(logo.getContext(),
                 entries.get(position).companyLogoId));
 

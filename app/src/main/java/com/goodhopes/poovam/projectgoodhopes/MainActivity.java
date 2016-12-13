@@ -3,7 +3,8 @@ package com.goodhopes.poovam.projectgoodhopes;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,10 +15,11 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.goodhopes.poovam.projectgoodhopes.aboutus.AboutUsFragment;
-import com.goodhopes.poovam.projectgoodhopes.cardfragment.CardViewFragment;
-import com.goodhopes.poovam.projectgoodhopes.common.CurrentView;
+import com.goodhopes.poovam.projectgoodhopes.common.BaseApplicationClass;
+import com.goodhopes.poovam.projectgoodhopes.common.SettingsInfo;
 import com.goodhopes.poovam.projectgoodhopes.favouritesfragment.FavouritesFragment;
-import com.goodhopes.poovam.projectgoodhopes.listfragment.ListViewFragment;
+import com.goodhopes.poovam.projectgoodhopes.home.HomeFragment;
+import com.goodhopes.poovam.projectgoodhopes.settings.SettingsDialog;
 import com.goodhopes.poovam.projectgoodhopes.shelffragment.ShelfFragment;
 
 import butterknife.BindView;
@@ -29,35 +31,44 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.frame_container)
     FrameLayout frameLayout;
     @BindView(R.id.bottom_navigation)
-    BottomNavigationView bottomNavigationView;
-    Fragment cardViewFragment;
-    Fragment listViewFragment;
+    BottomNavigationViewEx bottomNavigationView;
     Fragment favouritesFragment;
     Fragment shelfFragment;
     Fragment aboutUsFragment;
+    Fragment homeFragment;
     Dialog settingsDialog;
-    CurrentView currentView = CurrentView.LISTVIEW;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        BaseApplicationClass baseApplicationClass =(BaseApplicationClass) getApplicationContext();
+        SettingsInfo.StartPage startPage = baseApplicationClass.settingsInfo.startUpSetting;
         bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                new BottomNavigationViewEx.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         return onMenuIconClicked(item);
                     }
                 });
-        cardViewFragment = new CardViewFragment();
-        listViewFragment = new ListViewFragment();
         favouritesFragment = new FavouritesFragment();
         shelfFragment = new ShelfFragment();
         aboutUsFragment = new AboutUsFragment();
-        settingsDialog = createDialog();
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                cardViewFragment).commit();
+        homeFragment = new HomeFragment();
+        if(startPage == null){
+            onMenuIconClicked(bottomNavigationView.getMenu().getItem(0));
+        }
+        else {
+            if(startPage == SettingsInfo.StartPage.HOME){
+                onMenuIconClicked(bottomNavigationView.getMenu().getItem(0));
+            }else {
+                onMenuIconClicked(bottomNavigationView.getMenu().getItem(1));
+                bottomNavigationView.setCurrentItem(1);
+            }
+        }
     }
 
     @Override
@@ -66,17 +77,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_menu, menu);
-        return true;
+    protected void onPause() {
+        super.onPause();
     }
 
     public boolean onMenuIconClicked(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-
-            case R.id.list_view_icon:
-                switchViews(item);
+            case R.id.home_icon:
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
+                        homeFragment).commit();
                 return true;
             case R.id.shelf_icon:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
@@ -87,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         favouritesFragment).commit();
                 return true;
             case R.id.settings_icon:
+                SettingsDialog settingsDialog=new SettingsDialog(MainActivity.this);
                 settingsDialog.show();
                 return false;
             case R.id.about_us_icon:
@@ -98,21 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void switchViews(MenuItem item){
-        if(currentView == CurrentView.LISTVIEW){
-            currentView = CurrentView.CARDVIEW;
-            item.setIcon(R.drawable.ic_list_white_24dp);
-            item.setTitle("List View");
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                    cardViewFragment).commit();
-        }else {
-            currentView = CurrentView.LISTVIEW;
-            item.setIcon(R.drawable.ic_view_carousel_white_24dp);
-            item.setTitle("Card View");
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                    listViewFragment).commit();
-        }
-    }
+
 
     public Dialog createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

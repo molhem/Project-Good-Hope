@@ -1,7 +1,10 @@
 package com.goodhopes.poovam.projectgoodhopes.parsers.tamil;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
@@ -23,12 +26,21 @@ import java.util.Date;
  * parsed timestamp
  * need to get the image link from CDATA
  * date needs no conversion
+ * Image is parsed
  */
 
 public class DinakaranParser {
 
 
-    public static ArrayList<Entry> parseResponse(String response){
+    public static ArrayList<Entry> parseResponse(String response, Context context){
+
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.saved_data),
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(context.getString(Subscription.DINAKARAN.stringID), response);
+        editor.apply();
+
+
         XMLParser parser = new XMLParser();
         ArrayList<Entry> dinakaranEntries = new ArrayList<>();
         try {
@@ -45,7 +57,13 @@ public class DinakaranParser {
 
             String title = (parser.getValue(e, "title"));
             String content = parser.getCharacterDataFromElement(line);
-            String thumbNailURL = (parser.getValue(e, "image"));
+            String thumbNailURL = content.split(".jpg")[0];
+            thumbNailURL = thumbNailURL.substring(thumbNailURL.lastIndexOf("'")+1);
+            thumbNailURL = thumbNailURL+".jpg";
+            content = content.replaceAll(".*</a>", "");
+            content = content.replaceAll("<p>","");
+            content = content.replaceAll("</p>","");
+
             String contentURL = (parser.getValue(e, "link"));
             String time = (parser.getValue(e, "pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());
