@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -46,12 +47,15 @@ import butterknife.OnClick;
 
 public class FavouritesFragment extends Fragment {
     @BindView(R.id.list) RecyclerView recyclerView;
-
+    @BindView(R.id.empty_image) ImageView emptyImage;
+    @BindView(R.id.empty_message)
+    TextView emptyMessage;
     @OnClick(R.id.fab)
     public void onClick(){
         recyclerView.smoothScrollToPosition(0);
     }
     ArrayList<Entry> favourites = new ArrayList<>();
+    boolean deleteIt;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +70,21 @@ public class FavouritesFragment extends Fragment {
         if(favourites == null){
             favourites = new ArrayList<>();
         }
-        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         final View root = inflater.inflate(R.layout.list_view_fragment,container,false);
         ButterKnife.bind(this, root);
+        if(favourites.size()>0){
+            emptyMessage.setVisibility(View.GONE);
+            emptyImage.setVisibility(View.GONE);
+        }else {
+            emptyMessage.setVisibility(View.VISIBLE);
+            emptyImage.setVisibility(View.VISIBLE);
+        }
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -87,15 +98,41 @@ public class FavouritesFragment extends Fragment {
 
                     @Override
                     public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        final Entry deleted = favourites.get(viewHolder.getAdapterPosition());
+                        final int deletedPosition = viewHolder.getAdapterPosition();
+                        favourites.remove(viewHolder.getAdapterPosition());
                         recyclerView.getAdapter().notifyItemRemoved(viewHolder.getAdapterPosition());
-
+                        Gson gson = new Gson();
+                        SharedPreferences sharedPref = getContext().getSharedPreferences(
+                                getContext().getString(R.string.saved_data), Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        String savedFavs = gson.toJson(favourites);
+                        editor.putString(getContext().getString(R.string.favourites),savedFavs);
+                        editor.apply();
                         Snackbar.make(root,"The article has been removed from favourites",
                                 Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                            recyclerView.getAdapter().notifyDataSetChanged();
+                                deleteIt = false;
+                                favourites.add(deletedPosition,deleted);
+                                recyclerView.getAdapter().notifyItemInserted(deletedPosition);
+                                Gson gson = new Gson();
+                                SharedPreferences sharedPref = getContext().getSharedPreferences(
+                                        getContext().getString(R.string.saved_data), Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                String savedFavs = gson.toJson(favourites);
+                                editor.putString(getContext().getString(R.string.favourites),savedFavs);
+                                editor.apply();
+                                if(favourites.size() > 0){
+                                    emptyMessage.setVisibility(View.GONE);
+                                    emptyImage.setVisibility(View.GONE);
+                                }
                             }
                         }).show();
+                        if(favourites.size() == 0){
+                            emptyMessage.setVisibility(View.VISIBLE);
+                            emptyImage.setVisibility(View.VISIBLE);
+                        }
                     }
                 };
 
@@ -104,17 +141,11 @@ public class FavouritesFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
 
-        recyclerView.addItemDecoration(new ListItemSpacingDecoration(10, true));
+        recyclerView.addItemDecoration(new ListItemSpacingDecoration(12, true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         RecyclerView.Adapter mAdapter = new ListViewAdapter(favourites,getActivity(),false);
         recyclerView.setAdapter(mAdapter);
 
         return root;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.favourites_menu,menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 }

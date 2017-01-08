@@ -23,26 +23,26 @@ import java.util.ArrayList;
  */
 
 public enum Subscription {
-    DAILYTHANTHI("Daily Thanthi","http://www.dailythanthi.com/RSS/News/TopNews", R.drawable.daily_thanthi,
+    DAILYTHANTHI("தினத்தந்தி","http://www.dailythanthi.com/RSS/News/TopNews", R.drawable.daily_thanthi,
             R.string.dailythanthi),
-    DINAKARAN("Dinakaran","http://www.dinakaran.com/rss_Latest.asp",R.drawable.dinakaran_logo,
+    DINAKARAN("தினகரன்","http://www.dinakaran.com/rss_Latest.asp",R.drawable.dinakaran,
             R.string.dinakaran),
-    DINAMALAR("Dinamalar","http://feeds.feedburner.com/dinamalar/Front_page_news?format=xml",
+    DINAMALAR("தினமலர்","http://feeds.feedburner.com/dinamalar/Front_page_news?format=xml",
             R.drawable.dinamalar,R.string.dinamalar),
-    VIKATAN("VIKATAN","http://rss.vikatan.com/?cat=news_imprt",R.drawable.vikatan,R.string.vikatan),
-    DINAMANI("Dinamani","http://www.dinamani.com/%E0%AE%A4%E0%AE%B1%E0%AF%8D%E0%AE%AA%E0%AF%8B%E0%" +
+    VIKATAN("விகடன்","http://rss.vikatan.com/?cat=news_imprt",R.drawable.vikatan,R.string.vikatan),
+    DINAMANI("தினமணி","http://www.dinamani.com/%E0%AE%A4%E0%AE%B1%E0%AF%8D%E0%AE%AA%E0%AF%8B%E0%" +
             "AE%A4%E0%AF%88%E0%AE%AF-%E0%AE%9A%E0%AF%86%E0%AE%AF%E0%AF%8D%E0%AE%A4%E0%AE%BF%E0%AE%9" +
             "5%E0%AE%B3%E0%AF%8D/%E0%AE%A4%E0%AE%B1%E0%AF%8D%E0%AE%AA%E0%AF%8B%E0%AE%A4%E0%AF%88%E0" +
             "%AE%AF-%E0%AE%9A%E0%AF%86%E0%AE%AF%E0%AF%8D%E0%AE%A4%E0%AE%BF%E0%AE%95%E0%AE%B3%E0%AF%8" +
             "D/rssfeed/?id=687&getXmlFeed=true",R.drawable.dinamani,R.string.dinamani),
-    TAMIL_HINDU("Tamil Hindu","http://tamil.thehindu.com/?service=rss",R.drawable.tamil_hindu,
+    TAMIL_HINDU("தி இந்து","http://tamil.thehindu.com/?service=rss",R.drawable.tamil_hindu,
             R.string.tamil_hindu),
-    MAALAIMALAR("மாலை மலர்","http://www.maalaimalar.com/SectionRSS/News/TopNews",R.drawable.maalai_malar,
+    MAALAIMALAR("மாலை மலர்","http://www.maalaimalar.com/SectionRSS/News/TopNews",R.drawable.maalaimalar,
             R.string.maalaimalar),
-    TOI("Times Of India","http://timesofindia.indiatimes.com/rssfeeds/1221656.cms",R.drawable.toi,
+    TOI("Times of India","http://timesofindia.indiatimes.com/rssfeedstopstories.cms",R.drawable.toi,
             R.string.toi),
     THE_HINDU("The Hindu","http://www.thehindu.com/?service=rss",R.drawable.the_hindu,R.string.the_hindu),
-    INDIAN_EXPRESS("Indian Express","http://syndication.indianexpress.com/rss/latest-news.xml",
+    INDIAN_EXPRESS("The Indian Express","http://indianexpress.com/section/india/feed/",
             R.drawable.indian_express,R.string.indian_express);
 
 

@@ -12,6 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +38,9 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
     private ArrayList<Entry> entries = new ArrayList<>();
     private FragmentActivity activity;
     boolean showFavIcon;
+
+
+
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView titleText;
@@ -73,59 +81,26 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         holder.titleText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(view.getContext(), WebBrowserView.class);
-                intent.putExtra("contentURL",entries.get(holder.getAdapterPosition()).contentUrl);
-                intent.putExtra("title",entries.get(holder.getAdapterPosition()).title);
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(activity,v, "profile");
-                view.getContext().startActivity(intent,options.toBundle());
+                new OnClickHandlers().webViewLoader(view,holder.getAdapterPosition(),entries,activity,v);
             }
         });
         holder.subjectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(view.getContext(), WebBrowserView.class);
-                intent.putExtra("contentURL",entries.get(holder.getAdapterPosition()).contentUrl);
-                intent.putExtra("title",entries.get(holder.getAdapterPosition()).title);
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(activity,v, "profile");
-                view.getContext().startActivity(intent,options.toBundle());
+                new OnClickHandlers().webViewLoader(view,holder.getAdapterPosition(),entries,activity,v);
             }
         });
         holder.shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_SUBJECT, "My application name");
-                String sAux = "\n"+entries.get(holder.getAdapterPosition()).contentUrl+"\n\n";
-                sAux = sAux + entries.get(holder.getAdapterPosition()).contentUrl;
-                i.putExtra(Intent.EXTRA_TEXT, sAux);
-                holder.shareIcon.getContext().startActivity(Intent.createChooser(i, "Choose one"));
+               new OnClickHandlers().onShareIconClicked(view,holder.getAdapterPosition(),entries);
             }
         });
 
         holder.favIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPref = holder.favIcon.getContext().getSharedPreferences(
-                        holder.favIcon.getContext().getString(R.string.saved_data),Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                Gson gson = new Gson();
-                String savedFavs = sharedPref.getString(holder.favIcon.getContext().getString(R.string.favourites),"");
-                ArrayList<Entry> favourites;
-                Type type = new TypeToken<List<Entry>>() {
-                }.getType();
-                favourites = gson.fromJson(savedFavs, type);
-                if(favourites == null){
-                    favourites = new ArrayList<>();
-                }
-                favourites.add(entries.get(holder.getAdapterPosition()));
-                savedFavs = gson.toJson(favourites);
-                editor.putString(holder.favIcon.getContext().getString(R.string.favourites),savedFavs);
-                editor.apply();
-                Toast.makeText(holder.favIcon.getContext(),"Successfully saved to favourites",Toast.LENGTH_SHORT)
-                        .show();
+                new OnClickHandlers().onFavouritesClicked(view,holder.getAdapterPosition(),entries);
             }
         });
         return holder;
@@ -137,7 +112,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
         holder.titleText.setText(entries.get(position).title);
         holder.subjectText.setText(entries.get(position).content);
         holder.companyName.setText(entries.get(position).author);
-        holder.time.setText(entries.get(position).time+"");
+        holder.time.setText(new Utilities().timeAgoConversion(entries.get(position).time));
         holder.logo.setImageDrawable(ContextCompat.getDrawable(holder.logo.getContext(),
                 entries.get(position).companyLogoId));
         if(!showFavIcon){
@@ -148,18 +123,15 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
             Picasso.with(holder.thumbNail.getContext())
                     .load(entries.get(position).thumbNailUrl)
                     .fit()
-                    .placeholder(ContextCompat.getDrawable(holder.thumbNail.getContext(),R.drawable.dinakaran_logo))
+                    .placeholder(ContextCompat.getDrawable(holder.thumbNail.getContext(),R.drawable.placeholder))
                     .into(holder.thumbNail);
         }
-
-
     }
 
     @Override
     public int getItemCount() {
         return entries.size();
     }
-
 
 }
 

@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -38,7 +40,9 @@ public class ReaderActivity extends AppCompatActivity {
     @BindView(R.id.frame_container)
     FrameLayout frameLayout;
     @BindView(R.id.parent)
-    LinearLayout parent;
+    RelativeLayout parent;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     CardViewFragment cardViewFragment;
     ListViewFragment listViewFragment;
     public ArrayList<Entry> entries = new ArrayList<>();
@@ -50,6 +54,7 @@ public class ReaderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reader_layout);
         ButterKnife.bind(this);
+        progressBar.setVisibility(View.VISIBLE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         subscription =(Subscription) getIntent().getSerializableExtra("selection");
         listViewFragment = new ListViewFragment();
@@ -59,7 +64,6 @@ public class ReaderActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(subscription.name);
         listViewFragment.setArguments(bundle);
         cardViewFragment.setArguments(bundle);
-
         BaseApplicationClass base = (BaseApplicationClass) getApplicationContext();
         currentView = base.settingsInfo.viewSetting;
         if(currentView == CurrentView.CARDVIEW){
@@ -106,6 +110,7 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void sendRequest(final Subscription selection){
+        progressBar.setVisibility(View.VISIBLE);
         new NetworkConnection(this).getRSS(selection.URL, new ResponseHandler() {
             @Override
             public void parse(String response) {
@@ -114,11 +119,13 @@ public class ReaderActivity extends AppCompatActivity {
                 cardViewFragment.entries = entries;
                 listViewFragment.notifyDatasetChanged();
                 cardViewFragment.notifyDatasetChanged();
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void error(String error) {
                 Toast.makeText(ReaderActivity.this,error,Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }

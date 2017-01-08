@@ -39,15 +39,19 @@ public class IndianExpressParser {
         NodeList nl = doc.getElementsByTagName("item");
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
+            Element url =(Element) e.getElementsByTagName("media:thumbnail").item(0);
             String title = (parser.getValue(e, "title"));
-            String content = (parser.getValue(e,"description"));
-            String thumbNailURL = (parser.getValue(e, "image"));
+            String content = ("No content provided");
+            String thumbNailURL = "-";
+            if(url!=null) {
+                thumbNailURL = (url.getAttribute("url"));
+            }
             String contentURL = (parser.getValue(e, "link"));
             String time = (parser.getValue(e, "pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());
             try {
                 //Thu, 08 Dec 2016 18:59:54 GMT
-                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.US);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                 Date parsedDate = dateFormat.parse(time);
                 timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 //Log.d("Indian Express",timestamp.toString());

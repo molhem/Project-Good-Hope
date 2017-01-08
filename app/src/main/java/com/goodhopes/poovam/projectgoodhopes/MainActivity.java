@@ -2,8 +2,13 @@ package com.goodhopes.poovam.projectgoodhopes;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 
+import com.goodhopes.poovam.projectgoodhopes.common.CurrentView;
+import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
+import com.goodhopes.poovam.projectgoodhopes.reader.cardview.CardViewFragment;
+import com.goodhopes.poovam.projectgoodhopes.reader.listview.ListViewFragment;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.aboutus.AboutUsFragment;
 import com.goodhopes.poovam.projectgoodhopes.common.BaseApplicationClass;
@@ -21,6 +27,7 @@ import com.goodhopes.poovam.projectgoodhopes.favouritesfragment.FavouritesFragme
 import com.goodhopes.poovam.projectgoodhopes.home.HomeFragment;
 import com.goodhopes.poovam.projectgoodhopes.settings.SettingsDialog;
 import com.goodhopes.poovam.projectgoodhopes.shelffragment.ShelfFragment;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,15 +43,15 @@ public class MainActivity extends AppCompatActivity {
     Fragment shelfFragment;
     Fragment aboutUsFragment;
     Fragment homeFragment;
-    Dialog settingsDialog;
-
+    Fragment listViewFragment;
+    Fragment cardViewFragment;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         BaseApplicationClass baseApplicationClass =(BaseApplicationClass) getApplicationContext();
         SettingsInfo.StartPage startPage = baseApplicationClass.settingsInfo.startUpSetting;
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -58,17 +65,9 @@ public class MainActivity extends AppCompatActivity {
         shelfFragment = new ShelfFragment();
         aboutUsFragment = new AboutUsFragment();
         homeFragment = new HomeFragment();
-        if(startPage == null){
-            onMenuIconClicked(bottomNavigationView.getMenu().getItem(0));
-        }
-        else {
-            if(startPage == SettingsInfo.StartPage.HOME){
-                onMenuIconClicked(bottomNavigationView.getMenu().getItem(0));
-            }else {
-                onMenuIconClicked(bottomNavigationView.getMenu().getItem(1));
-                bottomNavigationView.setCurrentItem(1);
-            }
-        }
+        listViewFragment = new ListViewFragment();
+        cardViewFragment = new CardViewFragment();
+        setUpStartPage(startPage);
     }
 
     @Override
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.home_icon:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                        homeFragment).commit();
+                        homeFragment,"HOME_FRAGMENT").commit();
                 return true;
             case R.id.shelf_icon:
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
@@ -109,18 +108,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setUpStartPage(SettingsInfo.StartPage startPage){
+        if(startPage == null){
+            onMenuIconClicked(bottomNavigationView.getMenu().getItem(0));
+        }
+        else {
+            if(startPage == SettingsInfo.StartPage.HOME){
+                onMenuIconClicked(bottomNavigationView.getMenu().getItem(0));
+            }else {
+                onMenuIconClicked(bottomNavigationView.getMenu().getItem(1));
+                bottomNavigationView.setCurrentItem(1);
+            }
+        }
+    }
 
-    public Dialog createDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Settings");
-        builder.setView(getLayoutInflater().inflate(R.layout.about_us_framgent, null))
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
 
-                    }
-                });
-        return builder.create();
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please press back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 
 }

@@ -51,7 +51,7 @@ public class TOIParser {
             Timestamp timestamp = new Timestamp(new Date().getDate());
             try {
                 //Thu, 08 Dec 2016 18:59:54 GMT
-                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.US);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                 Date parsedDate = dateFormat.parse(time);
                 timestamp = new java.sql.Timestamp(parsedDate.getTime());
                 //Log.d("TOI",timestamp.toString());

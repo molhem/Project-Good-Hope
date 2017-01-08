@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background_blue"
+    android:background="@color/background"
     android:transitionName="@string/transition">
 
 
@@ -12,15 +12,32 @@
             android:layout_height="match_parent"
             android:id="@+id/list"
             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Its empty here"
+            android:textSize="18sp"
+            android:textColor="@color/title_text_color"
+            android:id="@+id/empty_message"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="100dp"
+            android:layout_gravity="center"
+            android:id="@+id/empty_image"
+            android:src="@drawable/empty"/>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            app:rippleColor="@color/colorPrimaryDark"
             app:fabSize="mini"
             android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
             app:layout_anchor="@+id/list"
             app:layout_anchorGravity="bottom|end"
+            app:backgroundTint="#FFF"
             app:layout_behavior="com.goodhopes.poovam.projectgoodhopes.common.FABBehaviour"/>
 
 

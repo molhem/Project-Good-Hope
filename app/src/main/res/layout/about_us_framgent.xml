@@ -1,6 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+   >
 
-</LinearLayout>
+    <RelativeLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:id="@+id/logo"
+            android:src="@drawable/placeholder"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:id="@+id/about_us_text"
+            android:text="Thank you for downloading our app. It is a pleasure to provide service to you. Mithran - Tamil News will be under constant improvement and we would love your feedback for it and that's why we have created a simple feedback form below. Please give us feedback on what more you would like to see on the app."
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/title_text_color"
+            android:layout_marginTop="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/rate_us_container"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/about_us_text"
+            android:layout_alignLeft="@id/about_us_text"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/play_store_logo"
+                android:src="@drawable/playstore"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rate us on the Play Store"
+                android:id="@+id/rate_us_text"
+                android:layout_marginLeft="15dp"
+                android:textSize="17sp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/title_text_color"
+                />
+
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/rate_us_container"
+            android:id="@+id/divider"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorPrimaryDark"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignLeft="@id/about_us_text"
+            android:layout_alignRight="@id/about_us_text"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/title_text_color"
+                android:textSize="19sp"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:text="Feedback"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/sender_name"
+                android:inputType="text"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:hint="Name or Email Id (Optional)"
+                android:background="@drawable/feedback_box" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:inputType="textMultiLine"
+                android:layout_marginTop="10dp"
+                android:gravity="top"
+                android:id="@+id/feedback"
+                android:hint="Feedback"
+                android:paddingLeft="10dp"
+                android:background="@drawable/feedback_box" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="#FFF"
+                android:layout_gravity="center_horizontal"
+                android:text="Submit"
+                android:id="@+id/submit"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>

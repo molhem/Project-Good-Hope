@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ProjectGoodHopes</string>
+    <string name="app_name">Mithran - Tamil News</string>
     <string name="dinakaran">com.projectgoodhope.saved.dinakaran</string>
     <string name="dailythanthi">com.projectgoodhope.saved.dailythanthi</string>
     <string name="dinamalar">com.projectgoodhope.saved.dinamalar</string>
@@ -12,6 +12,7 @@
     <string name="indian_express">com.projectgoodhope.saved.indian_express</string>
     <string name="saved_data">com.projectgoodhope.saved.data</string>
     <string name="favourites">com.projectgoodhope.saved.favourites</string>
+    <string name="favourites1">com.projectgoodhope.saved.favourites</string>
     <string name="transition">com.projectgoodhope.transition</string>
     <string name="settings">com.projectgoodhope.saved.settings</string>
 </resources>

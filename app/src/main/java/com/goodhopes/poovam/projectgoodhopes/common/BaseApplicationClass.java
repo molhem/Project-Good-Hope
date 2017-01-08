@@ -4,11 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.crashlytics.android.Crashlytics;
 import com.goodhopes.poovam.projectgoodhopes.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by poovam on 11/12/16.
@@ -20,6 +23,7 @@ public class BaseApplicationClass extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         getSettings();
     }
     public void getSettings(){

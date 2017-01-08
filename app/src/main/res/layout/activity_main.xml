@@ -13,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/base_yellow"
-        app:itemIconTint="@color/theme_pink"
-        app:itemTextColor="@color/theme_pink"
+        app:itemBackground="@color/colorPrimary"
+        app:itemIconTint="@color/accentColor"
+        app:itemTextColor="@color/accentColor"
         app:menu="@menu/bottom_menu"
-        android:elevation="10dp"
         />
 
     <FrameLayout

@@ -11,6 +11,8 @@ import com.goodhopes.poovam.projectgoodhopes.parsers.XMLParser;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.UnsupportedEncodingException;
@@ -44,11 +46,11 @@ public class MaalaiMalarParser {
         NodeList nl = doc.getElementsByTagName("item");
         for (int i = 0; i < nl.getLength(); i++) {
             Element e = (Element) nl.item(i);
-
+            Element url =(Element) e.getElementsByTagName("a10:link").item(0);
             String title = (parser.getValue(e,"title"));
             String content = (parser.getValue(e,"description"));
             String thumbNailURL = (parser.getValue(e,"image"));
-            String contentURL = (parser.getValue(e,"link"));
+            String contentURL = (url.getAttribute("href"));
             String time = (parser.getValue(e,"pubDate"));
             Timestamp timestamp = new Timestamp(new Date().getDate());
             try {

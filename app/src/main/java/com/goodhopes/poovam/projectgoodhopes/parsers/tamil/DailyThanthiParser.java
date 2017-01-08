@@ -71,7 +71,6 @@ public class DailyThanthiParser {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
                 Date parsedDate = dateFormat.parse(time);
                 timestamp = new java.sql.Timestamp(parsedDate.getTime());
-                timestamp.setTime(timestamp.getTime() + 330*60*1000);
                 //Log.d("daily thanthi",timestamp.toString());
             } catch (ParseException e1) {
                 e1.printStackTrace();

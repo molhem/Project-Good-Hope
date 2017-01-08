@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#BDBDBD</color>
+    <color name="colorPrimary">#F5F5F5</color>
+    <color name="colorPrimaryDark">#689f38</color>
+    <color name="background">#f2f2f2</color>
+    <color name="card_color">#FFFFFF</color>
     <color name="colorAccent">#9E9E9E</color>
-    <color name="background_blue">#0288D1</color>
     <color name="base_yellow">#FFEB3B</color>
     <color name="theme_pink">#EC407A</color>
     <color name="theme_color">#EC407A</color>
     <color name="title_text_color">#000000</color>
+    <color name="item_icon_tint">#666</color>
+    <color name="accentColor">#558b2f</color>
+    <color name="black">#000</color>
 </resources>

@@ -1,12 +1,16 @@
 package com.goodhopes.poovam.projectgoodhopes.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.media.Image;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -17,7 +21,9 @@ import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 /**
  * Created by poovam on 2/12/16.
@@ -25,10 +31,12 @@ import java.util.List;
  */
 public class SwipeStackAdapter extends BaseAdapter {
     private ArrayList<Entry> entries;
+    private Activity activity;
 
 
-    public SwipeStackAdapter(ArrayList<Entry> entries) {
+    public SwipeStackAdapter(ArrayList<Entry> entries,Activity activity) {
         this.entries = entries;
+        this.activity = activity;
     }
 
 
@@ -58,23 +66,39 @@ public class SwipeStackAdapter extends BaseAdapter {
         TextView time = (TextView) convertView.findViewById(R.id.time);
         ImageView thumbNail = (ImageView) convertView.findViewById(R.id.thumb_nail);
         ImageView logo = (ImageView) convertView.findViewById(R.id.company_logo);
+        ImageView shareIcon = (ImageView)convertView.findViewById(R.id.share_icon);
+        ImageView favIcon = (ImageView)convertView.findViewById(R.id.favourite_icon);
 
+        shareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new OnClickHandlers().onShareIconClicked(view,position,entries);
+            }
+        });
 
+        favIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new OnClickHandlers().onFavouritesClicked(view,position,entries);
+            }
+        });
 
+        thumbNail.setVisibility(View.GONE);
         titleText.setText(entries.get(position).title);
         subjectText.setText(entries.get(position).content);
         companyName.setText(entries.get(position).author);
-        time.setText(entries.get(position).time+"   ");
+        time.setText(new Utilities().timeAgoConversion(entries.get(position).time));
         logo.setImageDrawable(ContextCompat.getDrawable(logo.getContext(),
                 entries.get(position).companyLogoId));
 
-        thumbNail.setVisibility(View.GONE);
-
-//
-//        Picasso.with(parent.getContext())
-//                .load(m1Data.get(position))
-//                .resize(60, 60)
-//                .into(thumbNail);
+        if(URLUtil.isValidUrl(entries.get(position).thumbNailUrl)){
+            thumbNail.setVisibility(View.VISIBLE);
+            Picasso.with(thumbNail.getContext())
+                    .load(entries.get(position).thumbNailUrl)
+                    .fit()
+                    .placeholder(ContextCompat.getDrawable(thumbNail.getContext(),R.drawable.placeholder))
+                    .into(thumbNail);
+        }
 
         return convertView;
     }

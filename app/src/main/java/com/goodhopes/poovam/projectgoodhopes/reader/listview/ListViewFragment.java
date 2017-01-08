@@ -18,6 +18,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.R;
@@ -40,7 +42,9 @@ public class ListViewFragment extends Fragment {
 
     @BindView(R.id.list) public RecyclerView recyclerView;
     @BindView(R.id.fab) public FloatingActionButton floatingActionButton;
-
+    @BindView(R.id.empty_image) ImageView emptyImage;
+    @BindView(R.id.empty_message)
+    TextView emptyMessage;
     RecyclerView.Adapter mAdapter;
     @OnClick(R.id.fab)
     public void onClick(){
@@ -75,6 +79,7 @@ public class ListViewFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View listView = inflater.inflate(R.layout.list_view_fragment, container, false);
         ButterKnife.bind(this, listView);
+        showMessageIfEmpty();
         //FAB sometimes appear at the top left corner
         floatingActionButton.hide();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -91,13 +96,16 @@ public class ListViewFragment extends Fragment {
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                         recyclerView.getAdapter().notifyItemRemoved(viewHolder.getAdapterPosition());
+                        if(recyclerView.getAdapter().getItemCount()== 0){
+                            emptyMessage.setVisibility(View.GONE);
+                        }
                     }
                 };
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        recyclerView.addItemDecoration(new ListItemSpacingDecoration(10, true));
+        recyclerView.addItemDecoration(new ListItemSpacingDecoration(12, true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter = new ListViewAdapter(entries,getActivity(),true);
         recyclerView.setAdapter(mAdapter);
@@ -107,7 +115,16 @@ public class ListViewFragment extends Fragment {
     public void notifyDatasetChanged(){
         mAdapter = new ListViewAdapter(entries,getActivity(),true);
         recyclerView.setAdapter(mAdapter);
-        Toast.makeText(context,"News is updated",Toast.LENGTH_SHORT).show();
+        showMessageIfEmpty();
+    }
+    private void showMessageIfEmpty(){
+        if(entries.size()>0){
+            emptyMessage.setVisibility(View.GONE);
+            emptyImage.setVisibility(View.GONE);
+        }else {
+            emptyMessage.setVisibility(View.VISIBLE);
+            emptyImage.setVisibility(View.VISIBLE);
+        }
     }
 }
 

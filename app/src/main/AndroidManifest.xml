@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.goodhopes.poovam.projectgoodhopes">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".common.BaseApplicationClass"
@@ -9,15 +11,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".common.SplashScreen"
+            android:screenOrientation="portrait" android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".webview.WebBrowserView"/>
         <activity android:name=".reader.ReaderActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="59038d6ba0d3c31c0b336bcd10633fd551301963"
+            />
     </application>
 
 </manifest>

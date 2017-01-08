@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -14,9 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.R;
+import com.goodhopes.poovam.projectgoodhopes.common.BaseApplicationClass;
+import com.goodhopes.poovam.projectgoodhopes.common.CurrentView;
+import com.goodhopes.poovam.projectgoodhopes.common.Entry;
+import com.goodhopes.poovam.projectgoodhopes.common.NetworkConnection;
+import com.goodhopes.poovam.projectgoodhopes.common.SettingsInfo;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
+import com.goodhopes.poovam.projectgoodhopes.common.Utilities;
+import com.goodhopes.poovam.projectgoodhopes.interfaces.ResponseHandler;
+import com.goodhopes.poovam.projectgoodhopes.reader.ReaderActivity;
+import com.goodhopes.poovam.projectgoodhopes.reader.cardview.CardViewFragment;
+import com.goodhopes.poovam.projectgoodhopes.reader.listview.ListViewFragment;
 import com.goodhopes.poovam.projectgoodhopes.shelffragment.GridSpacingItemDecorator;
 import com.goodhopes.poovam.projectgoodhopes.shelffragment.ShelfAdapter;
 
@@ -32,8 +44,8 @@ import butterknife.ButterKnife;
 
 public class HomeFragment extends Fragment {
 
-    @BindView(R.id.above_recycler) RecyclerView aboveRecycler;
-    @BindView(R.id.below_recycler) RecyclerView belowRecycler;
+    @BindView(R.id.recycler) RecyclerView recyclerView;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,39 +58,36 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.home_fragment,container,false);
         ButterKnife.bind(this,root);
-        firstTimeEnteringApp();
+        setUpHomePage();
         return root;
     }
-    private int dpToPx(int dp) {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    private void setUpHomePage(){
+        BaseApplicationClass base = (BaseApplicationClass) getActivity().getApplicationContext();
+        if(base.settingsInfo.subscribedToo!=null){
+           new Utilities().refreshHomePage((AppCompatActivity)getActivity(),true);
+        }else {
+            firstTimeEnteringApp();
+        }
     }
-    void firstTimeEnteringApp(){
+    private void firstTimeEnteringApp(){
         ArrayList<String> name = new ArrayList<>();
-        ArrayList<String> name1 = new ArrayList<>();
-        ArrayList<String> name2 = new ArrayList<>();
         ArrayList<Integer> icon = new ArrayList<>();
-        ArrayList<Integer> icon1 = new ArrayList<>();
-        ArrayList<Integer> icon2 = new ArrayList<>();
         for(Subscription subscription: Subscription.values()){
             name.add(subscription.name);
             icon.add(subscription.iconID);
         }
-        for(int i=0;i<5;i++){
-            name1.add(name.get(i));
-            icon1.add(icon.get(i));
-        }
-        for(int i=5;i<10;i++){
-            name2.add(name.get(i));
-            icon2.add(icon.get(i));
-        }
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),5);
-        aboveRecycler.setLayoutManager(mLayoutManager);
-        aboveRecycler.addItemDecoration(new GridSpacingItemDecorator(5, dpToPx(10), true));
-        aboveRecycler.setAdapter(new HomeAdapter(name1,icon1,true));
-        belowRecycler.setLayoutManager( new GridLayoutManager(getActivity(),5));
-        belowRecycler.addItemDecoration(new GridSpacingItemDecorator(5, dpToPx(10), true));
-        belowRecycler.setAdapter(new HomeAdapter(name2,icon2,true));
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(),3);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecorator(3, dpToPx(10), true));
+        recyclerView.setAdapter(new HomeAdapter(name,icon,true,getActivity()));
+    }
+
+
+
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
 }

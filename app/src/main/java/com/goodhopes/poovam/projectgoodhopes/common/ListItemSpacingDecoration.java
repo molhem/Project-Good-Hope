@@ -27,10 +27,10 @@ public class ListItemSpacingDecoration extends RecyclerView.ItemDecoration {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = parent.getChildAdapterPosition(view);
 
-            outRect.top = 10;
-            outRect.bottom = 10;
-            outRect.right = 10;
-            outRect.left = 10;
+            outRect.top = spacing;
+            outRect.bottom = spacing;
+            outRect.right = spacing;
+            outRect.left = spacing;
         }
 
 }

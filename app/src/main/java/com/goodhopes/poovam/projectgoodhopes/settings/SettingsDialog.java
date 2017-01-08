@@ -2,10 +2,11 @@ package com.goodhopes.poovam.projectgoodhopes.settings;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioGroup;
@@ -16,6 +17,8 @@ import com.goodhopes.poovam.projectgoodhopes.common.BaseApplicationClass;
 import com.goodhopes.poovam.projectgoodhopes.common.CurrentView;
 import com.goodhopes.poovam.projectgoodhopes.common.SettingsInfo;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
+import com.goodhopes.poovam.projectgoodhopes.common.Utilities;
+import com.goodhopes.poovam.projectgoodhopes.home.HomeFragment;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -43,6 +46,13 @@ public class SettingsDialog extends Dialog  {
         base.settingsInfo.setHomePage(getHomePage());
         base.settingsInfo.setStartUpSetting(getStartPage());
         base.updateSettings();
+        boolean commitNow = false;
+        Fragment myFragment = ((AppCompatActivity)activity).getSupportFragmentManager()
+                .findFragmentByTag("HOME_FRAGMENT");
+        if (myFragment != null && myFragment.isVisible()) {
+           commitNow = true;
+        }
+        new Utilities().refreshHomePage((AppCompatActivity)activity,commitNow);
         dismiss();
     }
     @OnClick(R.id.btn_no)
@@ -91,6 +101,7 @@ public class SettingsDialog extends Dialog  {
 
     private Subscription getHomePage() {
         Subscription s = null;
+        Log.d("selected",subscriptionSpinner.getSelectedItem().toString());
         for (Subscription subscription : Subscription.values()) {
             if (subscription.name.equals(subscriptionSpinner.getSelectedItem().toString())) {
                 s = subscription;
@@ -118,13 +129,22 @@ public class SettingsDialog extends Dialog  {
     }
 
     private void setSubscriptionSpinner(){
+        int i = 0;
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("Select One");
         for(Subscription subscription:Subscription.values()){
             arrayList.add(subscription.name);
         }
+        if(base.settingsInfo.subscribedToo!=null) {
+            for (i = 1; i < arrayList.size(); i++) {
+                if (arrayList.get(i).equals(base.settingsInfo.subscribedToo.name)) {
+                    break;
+                }
+            }
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(activity.getBaseContext(),
                 R.layout.spinner_item, arrayList);
         subscriptionSpinner.setAdapter(adapter);
+        subscriptionSpinner.setSelection(i);
     }
 }

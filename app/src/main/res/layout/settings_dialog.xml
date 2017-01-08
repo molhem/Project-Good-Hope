@@ -1,113 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Settings"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="@color/theme_color"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="30dp"/>
-<TextView
-    android:layout_width="wrap_content"
+<ScrollView android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="Select Paper to Subscribe"
-    android:layout_gravity="center"
-    android:textSize="20sp"/>
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:spinnerMode="dialog"
-        android:id="@+id/subscription_spinner"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Preferred View"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:textSize="20sp"/>
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/view_pref"
-        android:layout_marginTop="10dp"
-        android:checkedButton="@id/list">
-        <RadioButton
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List View"
-            android:id="@+id/list"/>
-        <RadioButton
+            android:text="Settings"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/title_text_color"
+            android:layout_gravity="center"
+            android:textSize="20sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/accentColor"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="30dp"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Card View"
-            android:id="@+id/card"/>
-    </RadioGroup>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select preferred start page"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:id="@+id/start_page_pref"
-        android:layout_gravity="center"
-        android:checkedButton="@id/home">
-        <RadioButton
+            android:text="Select a paper to display in the \nhome page"
+            android:gravity="center_horizontal"
+            android:textColor="@color/title_text_color"
+            android:layout_gravity="center"
+            android:textSize="20sp"/>
+        <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home Page"
-            android:id="@+id/home"/>
-        <RadioButton
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:spinnerMode="dialog"
+            android:id="@+id/subscription_spinner"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Shelf"
-            android:id="@+id/shelf"/>
-    </RadioGroup>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#3E80B4"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp">
+            android:text="Select your preferred view"
+            android:textColor="@color/title_text_color"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"/>
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/view_pref"
+            android:layout_marginTop="10dp"
+            android:checkedButton="@id/list">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="List View"
+                android:id="@+id/list"
+                android:buttonTint="@color/accentColor"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Card View"
+                android:id="@+id/card"
+                android:buttonTint="@color/accentColor"/>
+        </RadioGroup>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select a preferred start page"
+            android:textColor="@color/title_text_color"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"/>
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/start_page_pref"
+            android:layout_gravity="center"
+            android:checkedButton="@id/home">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home Page"
+                android:id="@+id/home"
+                android:buttonTint="@color/accentColor"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shelf"
+                android:id="@+id/shelf"
+                android:buttonTint="@color/accentColor"/>
+        </RadioGroup>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp">
 
-        <Button
-            android:id="@+id/btn_yes"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:background="@android:color/white"
-            android:clickable="true"
-            android:text="Apply"
-            android:textColor="#5DBCD2"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:background="@android:color/white"
+                android:clickable="true"
+                android:text="Apply"
+                android:textColor="@color/accentColor"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btn_no"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="5dp"
-            android:background="@android:color/white"
-            android:clickable="true"
-            android:text="Cancel"
-            android:textColor="#5DBCD2"
-            android:textStyle="bold" />
+            <Button
+                android:id="@+id/btn_no"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:background="@android:color/white"
+                android:clickable="true"
+                android:text="Cancel"
+                android:textColor="@color/accentColor"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

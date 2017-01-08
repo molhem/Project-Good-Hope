@@ -2,6 +2,7 @@ package com.goodhopes.poovam.projectgoodhopes.common;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -20,6 +21,8 @@ import com.android.volley.toolbox.Volley;
 import com.goodhopes.poovam.projectgoodhopes.interfaces.ResponseHandler;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -70,6 +73,27 @@ public class NetworkConnection {
             }
         });
 
+        mRequestQueue.add(stringRequest);
+    }
+    public void sendFeedBack(String url, final HashMap<String,String> params,final  ResponseHandler responseHandler){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>(){
+            @Override
+            public void onResponse(String response) {
+                responseHandler.parse(response);
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                responseHandler.error(volleyErrorMessage(error));
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return params;
+            }
+        };
+        Log.d("request",stringRequest.getUrl());
         mRequestQueue.add(stringRequest);
     }
     private String volleyErrorMessage(VolleyError volleyError){

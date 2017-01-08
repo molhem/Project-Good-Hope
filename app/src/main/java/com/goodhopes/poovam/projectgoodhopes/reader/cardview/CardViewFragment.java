@@ -5,13 +5,18 @@ import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.common.Entry;
+import com.goodhopes.poovam.projectgoodhopes.common.OnClickHandlers;
 import com.goodhopes.poovam.projectgoodhopes.common.Subscription;
 import com.goodhopes.poovam.projectgoodhopes.common.SwipeStackAdapter;
 
@@ -19,6 +24,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import link.fls.swipestack.SwipeStack;
 
 /**
@@ -29,6 +35,12 @@ import link.fls.swipestack.SwipeStack;
 
 public class CardViewFragment extends Fragment {
     @BindView(R.id.swipeStack) public SwipeStack swipeStack;
+    @BindView(R.id.empty_message)
+    TextView emptyMessage;
+    @OnClick(R.id.empty_message) public void onClick(){
+        swipeStack.resetStack();
+        emptyMessage.setVisibility(View.INVISIBLE);
+    }
     SwipeStackAdapter adapter;
     public ArrayList<Entry> entries = new ArrayList<>();
     private Context context;
@@ -58,13 +70,49 @@ public class CardViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View cardView = inflater.inflate(R.layout.card_view_fragment,container,false);
         ButterKnife.bind(this,cardView);
-        adapter =  new SwipeStackAdapter(entries);
+        showMessageIfEmpty();
+        adapter =  new SwipeStackAdapter(entries,getActivity());
         swipeStack.setAdapter(adapter);
+        swipeStack.setListener(new SwipeStack.SwipeStackListener() {
+            @Override
+            public void onViewSwipedToLeft(int position) {
+            }
+
+            @Override
+            public void onViewSwipedToRight(int position) {
+            }
+
+            @Override
+            public void onStackEmpty() {
+                emptyMessage.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onClicked() {
+                new OnClickHandlers().webViewLoader(swipeStack,swipeStack.getCurrentPosition(),entries,
+                        getActivity(),swipeStack);
+            }
+
+            @Override
+            public void onLongClicked(long duration) {
+
+            }
+        });
+
+
         return cardView;
     }
     public void notifyDatasetChanged(){
-        adapter = new SwipeStackAdapter(entries);
+        adapter = new SwipeStackAdapter(entries,getActivity());
         swipeStack.setAdapter(adapter);
-        Toast.makeText(context,"News is updated",Toast.LENGTH_SHORT).show();
+        adapter.notifyDataSetChanged();
+        showMessageIfEmpty();
+    }
+    private void showMessageIfEmpty(){
+        if(entries.size()>0){
+            emptyMessage.setVisibility(View.GONE);
+        }else {
+            emptyMessage.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -11,7 +11,7 @@ public class SettingsInfo {
         HOME,SHELF;
     }
 
-    public StartPage startUpSetting = StartPage.HOME;
+    public StartPage startUpSetting = StartPage.SHELF;
     public CurrentView viewSetting = CurrentView.LISTVIEW;
     public Subscription subscribedToo;
 

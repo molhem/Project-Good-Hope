@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/background">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/center_layout"
-    android:layout_centerInParent="true">
+    android:id="@+id/title"
+    android:layout_alignParentTop="true">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="select one"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_horizontal"
+        android:text="Select the paper you want to display in the home page"
+        android:textSize="20sp"
+        android:textColor="@color/title_text_color"
+       />
 </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/center_layout"
-        android:id="@+id/above_recycler"/>
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/below_recycler"
-        android:layout_below="@id/center_layout"/>
+        android:id="@+id/recycler"
+        android:layout_below="@id/title"/>
+
 
 </RelativeLayout>
