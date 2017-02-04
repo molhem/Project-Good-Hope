@@ -82,6 +82,6 @@ public class ShelfAdapter extends RecyclerView.Adapter<ShelfAdapter.ShelfViewHol
 
     @Override
     public int getItemCount() {
-        return 10;
+        return name.size();
     }
 }

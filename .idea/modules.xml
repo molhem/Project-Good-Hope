@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ProjectGoodHopes.iml" filepath="$PROJECT_DIR$/ProjectGoodHopes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Project-Good-Hope.iml" filepath="$PROJECT_DIR$/Project-Good-Hope.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/libs.iml" filepath="$PROJECT_DIR$/libs/libs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/swipestacklibrary/swipestacklibrary.iml" filepath="$PROJECT_DIR$/libs/swipestacklibrary/swipestacklibrary.iml" />
     </modules>
   </component>
 </project>

@@ -6,14 +6,17 @@ import android.content.Context;
 import com.goodhopes.poovam.projectgoodhopes.R;
 import com.goodhopes.poovam.projectgoodhopes.parsers.english.IndianExpressParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.english.TOIParser;
+import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.BbcTamilParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.DailyThanthiParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.DinakaranParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.DinamalarParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.DinamaniParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.MaalaiMalarParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.english.TheHinduParser;
+import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.NewsSevenParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.TamilHinduParser;
 import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.VikatanParser;
+import com.goodhopes.poovam.projectgoodhopes.parsers.tamil.ZeeTamilParser;
 
 import java.util.ArrayList;
 
@@ -39,6 +42,12 @@ public enum Subscription {
             R.string.tamil_hindu),
     MAALAIMALAR("மாலை மலர்","http://www.maalaimalar.com/SectionRSS/News/TopNews",R.drawable.maalaimalar,
             R.string.maalaimalar),
+    BBC_TAMIL("BBC தமிழ்","http://feeds.bbci.co.uk/tamil/rss.xml",R.drawable.bbc_tamil,
+            R.string.bbc_tamil),
+    ZEE_TAMIL("Z தமிழ்","http://zeenews.india.com/tamil/tamil-nadu.xml",R.drawable.z_tamil,
+            R.string.zee_tamil),
+    NEWS_SEVEN_TAMIL("News7 தமிழ்","http://feeds.feedburner.com/ns7/tamilnadunews",R.drawable.news7_tamil,
+            R.string.news_seven_tamil),
     TOI("Times of India","http://timesofindia.indiatimes.com/rssfeedstopstories.cms",R.drawable.toi,
             R.string.toi),
     THE_HINDU("The Hindu","http://www.thehindu.com/?service=rss",R.drawable.the_hindu,R.string.the_hindu),
@@ -72,10 +81,16 @@ public enum Subscription {
                 return DinamaniParser.parseResponse(response,context);
             case TAMIL_HINDU:
                 return TamilHinduParser.parseResponse(response,context);
-            case THE_HINDU:
-                return TheHinduParser.parseResponse(response,context);
             case MAALAIMALAR:
                 return MaalaiMalarParser.parseResponse(response,context);
+            case BBC_TAMIL:
+                return BbcTamilParser.parseResponse(response,context);
+            case ZEE_TAMIL:
+                return ZeeTamilParser.parseResponse(response,context);
+            case NEWS_SEVEN_TAMIL:
+                return NewsSevenParser.parseResponse(response,context);
+            case THE_HINDU:
+                return TheHinduParser.parseResponse(response,context);
             case TOI:
                 return TOIParser.parseResponse(response,context);
             case INDIAN_EXPRESS:

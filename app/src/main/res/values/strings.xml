@@ -8,6 +8,9 @@
     <string name="maalaimalar">com.projectgoodhope.saved.maalaimalar</string>
     <string name="the_hindu">com.projectgoodhope.saved.the_hindu</string>
     <string name="tamil_hindu">com.projectgoodhope.saved.tamil_hindu</string>
+    <string name="bbc_tamil">com.projectgoodhope.saved.bbc_tamil</string>
+    <string name="zee_tamil">com.projectgoodhope.saved.zee_tamil</string>
+    <string name="news_seven_tamil">com.projectgoodhope.saved.news_seven_tamil</string>
     <string name="toi">com.projectgoodhope.saved.toi</string>
     <string name="indian_express">com.projectgoodhope.saved.indian_express</string>
     <string name="saved_data">com.projectgoodhope.saved.data</string>
